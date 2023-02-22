@@ -26,6 +26,12 @@ export default function recordRequests(configuration: ReplayConfig) {
                         delay: Date.now() - startTime,
                     });
                 });
+
+                // By default the command timeout is lower than the request timeout.
+                // To record cancelled requests you need to increase the command timeout or lower the request timeout.
+                setTimeout(resolve, Cypress.config('requestTimeout'), {
+                    forceNetworkError: true,
+                });
             });
 
             requestCollection.pushIncomingRequest(request, promise);
